@@ -2,15 +2,16 @@ import numpy as np
 
 
 class DecisionStump:
-    def __init__(self, error_rate_epsilon: float = 1e-3) -> None:
-        self.error_rate_epsilon = error_rate_epsilon
+    def __init__(self) -> None:
         self.sign: int = None
         self.index: int = None
         self.threshold: float = None
-        self.alpha: float = None
+        self.reliability: float = None
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        return self.sign * np.sign(X[:, self.index] - self.threshold).astype(int)
+        return self.sign * (
+            2 * ((X[:, self.index] - self.threshold) > 0) - 1
+        )  # Prevent zero predictions
 
     def fit(self, X: np.ndarray, y: np.ndarray, weight: np.ndarray) -> None:
         num_samples, num_features = X.shape
@@ -39,4 +40,4 @@ class DecisionStump:
                     self.sign = 1 if error < error_inv else -1
                     self.index = i
                     self.threshold = threshold
-                    self.alpha = np.log((1 - error_rate) / error_rate)
+                    self.reliability = np.log((1 - error_rate) / error_rate)
