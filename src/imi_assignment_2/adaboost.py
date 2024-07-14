@@ -9,12 +9,10 @@ class AdaBoost:
         self.classifiers: list[DecisionStump] = []
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        return np.sign(
-            np.sum(
-                classifier.alpha * classifier.predict(X)
-                for classifier in self.classifiers
-            )
-        )
+        predictions = np.zeros((X.shape[0], self.num_classifiers), dtype=int)
+        for i, classifier in enumerate(self.classifiers):
+            predictions[:, i] = classifier.predict(X)
+        return 2 * (np.sum(predictions, axis=1) > 0) - 1  # Prevent zero predictions
 
     def fit(self, X: np.ndarray, y: np.ndarray):
         self.classifiers = []
