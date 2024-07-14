@@ -5,7 +5,7 @@ class Kernel:
     def __init__(self) -> None:
         pass
 
-    def __call__(self) -> np.ndarray:
+    def __call__(self) -> float:
         raise NotImplementedError
 
 
@@ -23,4 +23,4 @@ class GaussKernel(Kernel):
         self.gamma = gamma
 
     def __call__(self, x: np.ndarray, y: np.ndarray) -> float:
-        return np.exp(-self.gamma * np.sqrt(np.sum((x - y) ** 2)))
+        return np.exp(-self.gamma * np.sum((x - y) ** 2))
