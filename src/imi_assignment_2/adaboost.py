@@ -24,4 +24,4 @@ class AdaBoost:
             weight *= np.exp(
                 classifier.reliability * (classifier.predict(X) != y).astype(int)
             )
-            weight /= np.sum(weight)
+            weight /= np.sum(weight**2) ** 0.5
