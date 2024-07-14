@@ -8,14 +8,16 @@ class KernelKMeans:
         self.kernel = kernel
         self.rng = np.random.default_rng()
 
-    def classify(self, X: np.ndarray, K: int) -> np.ndarray:
+    def classify(
+        self, X: np.ndarray, K: int, converge_threshold: int = 0
+    ) -> np.ndarray:
         labels = self.rng.integers(K, size=X.shape[0])
         while True:
             distances = np.zeros((X.shape[0], K))
             for k in range(K):
                 distances[:, k] = self.calc_distance(X, X[labels == k])
             new_labels = np.argmin(distances, axis=1)
-            if (new_labels == labels).all():
+            if np.count_nonzero(new_labels != labels) <= converge_threshold:
                 break
             else:
                 labels = new_labels
