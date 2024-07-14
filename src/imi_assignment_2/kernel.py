@@ -13,8 +13,8 @@ class LinearKernel(Kernel):
     def __init__(self) -> None:
         super().__init__()
 
-    def __call__(self, x: np.ndarray, y: np.ndarray) -> float:
-        return np.dot(x, y)
+    def __call__(self, X: np.ndarray, Y: np.ndarray) -> float:
+        return np.sum(X * Y, axis=1)
 
 
 class GaussKernel(Kernel):
@@ -22,5 +22,5 @@ class GaussKernel(Kernel):
         super().__init__()
         self.gamma = gamma
 
-    def __call__(self, x: np.ndarray, y: np.ndarray) -> float:
-        return np.exp(-self.gamma * np.sum((x - y) ** 2))
+    def __call__(self, X: np.ndarray, Y: np.ndarray) -> float:
+        return np.exp(-self.gamma * np.sum((X - Y) ** 2, axis=1))
