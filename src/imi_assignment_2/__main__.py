@@ -4,9 +4,12 @@ import sklearn.datasets
 
 from .adaboost import AdaBoost
 
-iris = sklearn.datasets.load_iris()
-X = iris.data[iris.target != 0, 2:]
-y = iris.target[iris.target != 0] * 2 - 3
+classes_to_use = [1, 2]
+features_to_use = [2, 3]
+
+X, y = sklearn.datasets.load_iris(return_X_y=True)
+X = X[np.ix_(np.isin(y, classes_to_use), features_to_use)]
+y = np.where(y[np.isin(y, classes_to_use)] == classes_to_use[0], -1, 1)
 
 adaboost = AdaBoost(num_classifiers=10)
 adaboost.fit(X, y)
