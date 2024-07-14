@@ -1,3 +1,5 @@
+import time
+
 import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.datasets
@@ -15,7 +17,10 @@ if __name__ == "__main__":
     y = np.where(y[np.isin(y, classes_to_use)] == classes_to_use[0], -1, 1)
 
     adaboost = AdaBoost(num_classifiers=10)
+    start = time.perf_counter()
     adaboost.fit(X, y)
+    end = time.perf_counter()
+    print(f"Training time: {end - start:.3f}s")
 
     X1, X2 = np.meshgrid(
         np.arange(x_1_range[0], x_1_range[1] + 0.1, 0.1),
@@ -23,6 +28,7 @@ if __name__ == "__main__":
     )
     Z = adaboost.predict(np.column_stack((X1.ravel(), X2.ravel())))
 
+    plt.rcParams["font.size"] = 16
     plt.contourf(X1, X2, Z.reshape(X1.shape), alpha=0.5, levels=1, cmap="bwr")
     plt.scatter(X[y == -1, 0], X[y == -1, 1], c="b", label="versicolor")
     plt.scatter(X[y == 1, 0], X[y == 1, 1], c="r", label="virginica")
